@@ -64,6 +64,11 @@ psf *psf_read(FILE *fp) {
   // in zlib compress() format.
   p->prg = (uint8_t *) malloc(p->prg_size);
   fread(p->prg, 1, p->prg_size, fp);
+
+  if (p->prg != NULL && p->crc32 != crc32(0L, p->prg, p->prg_size)) {
+    psf_free(p);
+    return NULL;
+  }
   
   // Next 5 bytes: ASCII signature: "[TAG]" (case sensitive)
   bytes_read = fread(buf, 1, 5, fp);
