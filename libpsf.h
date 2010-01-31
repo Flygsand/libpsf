@@ -24,6 +24,7 @@ License along with libpsf. If not, see <http://www.gnu.org/licenses/>.
 #define _LIBPSF_H_
 
 #include <stdio.h>
+#include <stdint.h>
 
 typedef enum {
   PSF_PSF1 = 0x01, // PlayStation
@@ -40,9 +41,9 @@ typedef struct {
   psf_version version;
   size_t rsvd_size;
   size_t prg_size;
-  unsigned long crc32;
-  unsigned char *rsvd;
-  unsigned char *prg;
+  uint32_t crc32;
+  uint8_t *rsvd;
+  uint8_t *prg;
   char *tag;
 } psf;
 

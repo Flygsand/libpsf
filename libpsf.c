@@ -57,12 +57,12 @@ psf *psf_read(FILE *fp) {
   fread(&p->crc32, 4, 1, fp);
  
   // Next rsvd_size bytes: Reserved area.
-  p->rsvd = (unsigned char *) malloc(p->rsvd_size);
+  p->rsvd = (uint8_t *) malloc(p->rsvd_size);
   fread(p->rsvd, 1, p->rsvd_size, fp);
   
   // Next prg_size bytes: Compressed program, 
   // in zlib compress() format.
-  p->prg = (unsigned char *) malloc(p->prg_size);
+  p->prg = (uint8_t *) malloc(p->prg_size);
   fread(p->prg, 1, p->prg_size, fp);
   
   // Next 5 bytes: ASCII signature: "[TAG]" (case sensitive)
@@ -107,10 +107,10 @@ int psf_decompress(psf *p) {
   strm.avail_in = p->prg_size;
   strm.next_in = p->prg;
   
-  unsigned char *dcmp_prg = NULL;
+  uint8_t *dcmp_prg = NULL;
   size_t dcmp_prg_size = 0, dcmp_bytes = 0;
   size_t buf_size = 131072;
-  unsigned char buf[buf_size];
+  uint8_t buf[buf_size];
     
   do {
     strm.avail_out = buf_size;
@@ -137,7 +137,7 @@ int psf_decompress(psf *p) {
   
   free(p->prg);
   p->prg_size = dcmp_prg_size;
-  p->prg = (unsigned char*) malloc(dcmp_prg_size);
+  p->prg = (uint8_t *) malloc(dcmp_prg_size);
   memcpy(p->prg, dcmp_prg, dcmp_prg_size);
   free(dcmp_prg);
 
