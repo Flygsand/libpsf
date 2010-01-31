@@ -1,0 +1,3 @@
+libpsf is a C library for working with the Portable Sound Format (PSF). 
+
+PSF specification: http://wiki.neillcorlett.com/PSFFormat
