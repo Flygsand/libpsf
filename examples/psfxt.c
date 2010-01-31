@@ -19,7 +19,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 */
 
-#include <libpsf.h>
+#include <psf.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <libgen.h>
