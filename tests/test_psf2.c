@@ -19,14 +19,19 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
  
 */
 
+#include "common.h"
 #include "test_psf2.h"
+#include "../psf/psf2.h"
+#include <stdio.h>
 
-void test_psf2_print_fs_tree() {
-  FILE *file = fopen("/tmp/song.psf2");
-  psf *p = psf_read(file);
+test_conf conf = {
+  .inputfile = "/tmp/song.psf2",
+};
+
+void test_psf2_print_fs_tree(psf *p) {
   psf2_print_fs_tree(p);
 }
 
 void test_psf2() {
-  test_psf2_print_fs_tree();
+  run_test(test_psf2_print_fs_tree, conf);
 }

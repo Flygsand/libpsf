@@ -23,4 +23,6 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 int main(int argc, char *argv[]) {
   test_psf2();
+
+  return 0;
 }
