@@ -19,24 +19,24 @@ License along with libpsf. If not, see <http://www.gnu.org/licenses/>.
 
 */
 
-#include "psf2.h"
+#include "psf/psf2.h"
 #include <stdlib.h>
 #include <string.h>
 
 void recursive_print_fs_tree(psf *p, size_t offset, unsigned int indent_level) {
-  printf("/\n");
   
   uint8_t *fs = p->rsvd + offset;
-  
-  unsigned int dir_count;
+  unsigned int dir_count, dir, ind;
   char *filename = (char *) malloc(36);
   size_t data_offset, dcmp_size, block_size;
 
+  printf("/\n");
+  
   memcpy(&dir_count, fs, 4);
   fs += 4;
 
-  for (unsigned int dir = 0; dir < dir_count; dir++) {
-    for (unsigned int ind = 0; ind < indent_level - 1; ind++)
+  for (dir = 0; dir < dir_count; dir++) {
+    for (ind = 0; ind < indent_level - 1; ind++)
       printf("  ");
 
     printf("|-");

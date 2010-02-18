@@ -19,7 +19,7 @@ License along with libpsf. If not, see <http://www.gnu.org/licenses/>.
 
 */
 
-#include "psf.h"
+#include "psf/psf.h"
 #include <stdlib.h>
 #include <string.h>
 #include <zlib.h>

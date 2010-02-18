@@ -1,0 +1,4 @@
+libpsf itself is licensed under the GNU Lesser General Public License,
+but surrounding code (such as examples) are all licensed under the GNU
+General Public License. See COPYING.LGPL and COPYING.GPL for more
+information.
