@@ -29,7 +29,8 @@ psf *psf_read(FILE *fp) {
   const size_t buf_size = 1024;
   char buf[buf_size];
   size_t bytes_read;
-  
+  psf *p;
+
   // First 3 bytes: ASCII signature: "PSF" (case sensitive)
   bytes_read = fread(buf, 1, 3, fp);
   buf[bytes_read] = '\0';
@@ -37,35 +38,41 @@ psf *psf_read(FILE *fp) {
   if (strcmp(buf, "PSF") != 0)
     return NULL;
 
-  psf *p = (psf *) malloc(sizeof(psf));
+  if (!(p = (psf *) malloc(sizeof(psf))))
+    return NULL;
+
   p->version = 0;
   p->rsvd_size = p->prg_size = 0;
   p->crc32 = 0;
   p->rsvd = p->prg = NULL;
-  p->tag = NULL;
+  p->tag = NULL;  
   
-  // Next 1 byte: Version byte
-  fread(&p->version, 1, 1, fp);
+  if (!(
+      // Next 1 byte: Version byte
+      fread(&p->version, 1, 1, fp) == 1 && 
+      
+      // Next 4 bytes: Size of reserved area
+      fread(&p->rsvd_size, 4, 1, fp) == 1 &&
 
-  // Next 4 bytes: Size of reserved area
-  fread(&p->rsvd_size, 4, 1, fp);
+      // Next 4 bytes: Compressed program length
+      fread(&p->prg_size, 4, 1, fp) == 1 &&
 
-  // Next 4 bytes: Compressed program length
-  fread(&p->prg_size, 4, 1, fp);
-
-  // Next 4 bytes: Compressed program CRC-32
-  fread(&p->crc32, 4, 1, fp);
+      // Next 4 bytes: Compressed program CRC-32
+      fread(&p->crc32, 4, 1, fp) == 1 &&
  
-  // Next rsvd_size bytes: Reserved area.
-  p->rsvd = (uint8_t *) malloc(p->rsvd_size);
-  fread(p->rsvd, 1, p->rsvd_size, fp);
+      // Next rsvd_size bytes: Reserved area.
+      (p->rsvd = (uint8_t *) malloc(p->rsvd_size)) &&
+      fread(p->rsvd, 1, p->rsvd_size, fp) == p->rsvd_size &&
   
-  // Next prg_size bytes: Compressed program, 
-  // in zlib compress() format.
-  p->prg = (uint8_t *) malloc(p->prg_size);
-  fread(p->prg, 1, p->prg_size, fp);
-
-  if (p->prg != NULL && p->crc32 != crc32(0L, p->prg, p->prg_size)) {
+      // Next prg_size bytes: Compressed program, 
+      // in zlib compress() format.
+      (p->prg = (uint8_t *) malloc(p->prg_size)) &&
+      fread(p->prg, 1, p->prg_size, fp) == p->prg_size && 
+      
+      // CRC
+      (p->prg == NULL || p->crc32 == crc32(0L, p->prg, p->prg_size))
+        )) {
+    
     psf_free(p);
     return NULL;
   }
