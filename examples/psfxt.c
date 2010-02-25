@@ -64,6 +64,15 @@ int main(int argc, char *argv[])
     psf_free(p);
   }
 
+  /* Print PSF info */
+  if (p->tag)
+    printf("Title: %s\n" \
+           "Artist: %s\n" \
+           "Game: %s\n",
+           p->tag->title,
+           p->tag->artist,
+           p->tag->game);
+
   /* Write program to outfile */
   fwrite(p->prg, 1, p->prg_size, outfile);
   fclose(outfile);
